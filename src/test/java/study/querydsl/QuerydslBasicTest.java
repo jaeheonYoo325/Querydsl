@@ -64,7 +64,8 @@ class QuerydslBasicTest {
 	@Test
 	public void startQuerydsl() {
 		
-		QMember m = new QMember("m");
+		QMember m = QMember.member;
+		//QMember m1 = new QMember("m1"); 같은 테이블을 조인할 경우에 사용.
 		
 		Member findMember = queryFactory
 				.select(m)
