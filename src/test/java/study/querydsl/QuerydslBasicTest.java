@@ -64,17 +64,46 @@ class QuerydslBasicTest {
 	@Test
 	public void startQuerydsl() {
 		
-		QMember m = QMember.member;
+		QMember member = QMember.member;
 		//QMember m1 = new QMember("m1"); 같은 테이블을 조인할 경우에 사용.
 		
 		Member findMember = queryFactory
-				.select(m)
-				.from(m)
-				.where(m.username.eq("member1")) //파라미터 바인딩 처리
+				.select(member)
+				.from(member)
+				.where(member.username.eq("member1")) //파라미터 바인딩 처리
 				.fetchOne();
 		
 		Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+	}
+	
+	@Test
+	public void search() {
 		
+		QMember member = QMember.member;
+		
+		Member findMember = queryFactory
+				.selectFrom(member)
+				.where(member.username.eq("member1")
+						.and(member.age.eq(10)))
+				.fetchOne();
+		
+		Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+	}
+	
+	@Test
+	public void searchAndParam() {
+		
+		QMember member = QMember.member;
+		
+		Member findMember = queryFactory
+				.selectFrom(member)
+				.where(
+						member.username.eq("member1"),
+						member.age.eq(10)
+				)
+				.fetchOne();
+		
+		Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
 	}
 
 }
