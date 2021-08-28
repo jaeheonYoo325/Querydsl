@@ -9,10 +9,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
+import static study.querydsl.entity.QMember.*;
+
+import java.util.List;
+
 import study.querydsl.entity.Team;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +84,6 @@ class QuerydslBasicTest {
 	@Test
 	public void search() {
 		
-		QMember member = QMember.member;
-		
 		Member findMember = queryFactory
 				.selectFrom(member)
 				.where(member.username.eq("member1")
@@ -93,8 +96,6 @@ class QuerydslBasicTest {
 	@Test
 	public void searchAndParam() {
 		
-		QMember member = QMember.member;
-		
 		Member findMember = queryFactory
 				.selectFrom(member)
 				.where(
@@ -106,4 +107,36 @@ class QuerydslBasicTest {
 		Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
 	}
 
+	@Test
+	public void resultFetch() {
+
+//List
+//		List<Member> fetch = queryFactory
+//				.selectFrom(member)
+//				.fetch();
+		
+//단 건		
+//		Member fetchOne = queryFactory
+//				.selectFrom(member)
+//				.fetchOne();
+		
+//처음 한 건 조회		
+//		Member fetchFirst = queryFactory
+//				.selectFrom(member)
+//				.fetchFirst();
+		
+//페이징에서 사용		
+//		QueryResults<Member> results = queryFactory
+//				.selectFrom(member)
+//				.fetchResults();
+//		
+//		results.getTotal();
+//		List<Member> content = results.getResults();
+
+//count 쿼리로 변경		
+		long count = queryFactory
+				.selectFrom(member)
+				.fetchCount();
+		
+	}
 }
