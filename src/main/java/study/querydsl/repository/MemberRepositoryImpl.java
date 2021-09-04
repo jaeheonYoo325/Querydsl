@@ -108,22 +108,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 				.fetch();
 		
 		//Total Count 쿼리.
-		long total = queryFactory
-				.select(member)
-				.from(member)
-				.leftJoin(member.team, team)
-				.where(
-						usernameEq(condition.getUsername()),
-						teamNameEq(condition.getTeamName()),
-						ageGoe(condition.getAgeGoe()),
-						ageLoe(condition.getAgeLoe())
-				)
-				.fetchCount();
-
-		return new PageImpl<>(content, pageable, total);
-		
-// CountQuery 최적화		
-//		JPAQuery<Member> countQuery = queryFactory
+//		long total = queryFactory
 //				.select(member)
 //				.from(member)
 //				.leftJoin(member.team, team)
@@ -132,9 +117,24 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 //						teamNameEq(condition.getTeamName()),
 //						ageGoe(condition.getAgeGoe()),
 //						ageLoe(condition.getAgeLoe())
-//				);
-//		
-//		return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
+//				)
+//				.fetchCount();
+//
+//		return new PageImpl<>(content, pageable, total);
+		
+// CountQuery 최적화		
+		JPAQuery<Member> countQuery = queryFactory
+				.select(member)
+				.from(member)
+				.leftJoin(member.team, team)
+				.where(
+						usernameEq(condition.getUsername()),
+						teamNameEq(condition.getTeamName()),
+						ageGoe(condition.getAgeGoe()),
+						ageLoe(condition.getAgeLoe())
+				);
+		
+		return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
 	}
 	
 	private BooleanExpression usernameEq(String username) {
